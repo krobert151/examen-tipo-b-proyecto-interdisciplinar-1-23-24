@@ -21,6 +21,7 @@ public class JwtUserResponse extends UserResponse {
         id = userResponse.getId();
         username = userResponse.getUsername();
         fullName = userResponse.getFullName();
+        email = userResponse.getEmail();
         avatar = userResponse.getAvatar();
         createdAt = userResponse.getCreatedAt();
     }

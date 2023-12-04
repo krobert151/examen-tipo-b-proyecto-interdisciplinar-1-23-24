@@ -19,6 +19,8 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
@@ -82,7 +84,9 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                         .authorizeHttpRequests((authz) -> authz
-                                .anyRequest().permitAll());
+                                .requestMatchers(new AntPathRequestMatcher("/auth/register/admin/**")).hasRole("ADMIN")
+                                .requestMatchers(new AntPathRequestMatcher("/ticket/**")).hasRole("USER")
+                                .anyRequest().authenticated());
 
 
 

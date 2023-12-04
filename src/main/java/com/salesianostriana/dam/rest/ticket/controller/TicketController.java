@@ -5,6 +5,10 @@ import com.salesianostriana.dam.rest.ticket.model.Ticket;
 import com.salesianostriana.dam.rest.ticket.repo.TicketRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,9 +25,57 @@ public class TicketController {
 
     private final TicketRepository ticketRepository;
 
-    @GetMapping("/")
-    public ResponseEntity<List<Ticket>> getAll() {
-        List<Ticket> result = ticketRepository.findAll();
+    @GetMapping("/{pageNumber}/{size}")
+    public ResponseEntity<Page<Ticket>> getAll(@PathVariable int page, @PathVariable int size) {
+
+        Pageable pageable = new Pageable() {
+            @Override
+            public int getPageNumber() {
+                return page;
+            }
+
+            @Override
+            public int getPageSize() {
+                return size;
+            }
+
+            @Override
+            public long getOffset() {
+                return 0;
+            }
+
+            @Override
+            public Sort getSort() {
+                return null;
+            }
+
+            @Override
+            public Pageable next() {
+                return null;
+            }
+
+            @Override
+            public Pageable previousOrFirst() {
+                return null;
+            }
+
+            @Override
+            public Pageable first() {
+                return null;
+            }
+
+            @Override
+            public Pageable withPage(int pageNumber) {
+                return null;
+            }
+
+            @Override
+            public boolean hasPrevious() {
+                return false;
+            }
+        };
+
+        Page<Ticket> result = ticketRepository.findAllPageable(pageable);
         if (result.isEmpty()) {
             throw new EntityNotFoundException("No se ha podido encontrar el ticker");
         }
