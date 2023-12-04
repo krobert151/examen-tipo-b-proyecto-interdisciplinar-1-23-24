@@ -3,6 +3,7 @@ package com.salesianostriana.dam.rest.ticket.controller;
 import com.salesianostriana.dam.rest.ticket.GetTicketDto;
 import com.salesianostriana.dam.rest.ticket.model.Ticket;
 import com.salesianostriana.dam.rest.ticket.repo.TicketRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +25,7 @@ public class TicketController {
     public ResponseEntity<List<Ticket>> getAll() {
         List<Ticket> result = ticketRepository.findAll();
         if (result.isEmpty()) {
-            // Completar
+            throw new EntityNotFoundException("No se ha podido encontrar el ticker");
         }
         return ResponseEntity.ok(result);
 
@@ -35,7 +36,7 @@ public class TicketController {
     public ResponseEntity<Ticket> getById(@PathVariable Long id) {
         Optional<Ticket> result = ticketRepository.findById(id);
         if (result.isEmpty()) {
-            // Completar
+            throw new EntityNotFoundException("No se ha podido encontrar el ticker con el id"+id);
         }
         return ResponseEntity.ok(result.get());
 
